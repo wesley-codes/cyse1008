@@ -109,7 +109,7 @@ export function useGetProduct(productId) {
       setIsLoading(false);
       setError(null);
       return;
-    }
+    } 
 
     const fetchProduct = async () => {
       setIsLoading(true);
