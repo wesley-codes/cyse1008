@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMemo, useEffect, useCallback } from 'react';
-
+import { useAuthContext } from 'src/auth/hooks';
+import { doc, addDoc, updateDoc, collection } from 'firebase/firestore';
+import { DB } from 'src/auth/context/firebase/lib';
 import Chip from '@mui/material/Chip';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -37,7 +39,7 @@ import PostDetailsPreview from './post-details-preview';
 
 export default function PostNewEditForm({ currentPost }) {
   const router = useRouter();
-
+  const { user } = useAuthContext();
   const mdUp = useResponsive('up', 'md');
 
   const { enqueueSnackbar } = useSnackbar();
@@ -46,11 +48,11 @@ export default function PostNewEditForm({ currentPost }) {
 
   const NewBlogSchema = Yup.object().shape({
     title: Yup.string().required('Title is required'),
-    description: Yup.string().required('Description is required'),
-    content: Yup.string().required('Content is required'),
-    coverUrl: Yup.mixed().nullable().required('Cover is required'),
-    tags: Yup.array().min(2, 'Must have at least 2 tags'),
-    metaKeywords: Yup.array().min(1, 'Meta keywords is required'),
+    // description: Yup.string().required('Description is required'),
+    // content: Yup.string().required('Content is required'),
+    // coverUrl: Yup.mixed().nullable().required('Cover is required'),
+    // tags: Yup.array().min(2, 'Must have at least 2 tags'),
+    // metaKeywords: Yup.array().min(1, 'Meta keywords is required'),
     // not required
     metaTitle: Yup.string(),
     metaDescription: Yup.string(),
@@ -92,17 +94,46 @@ export default function PostNewEditForm({ currentPost }) {
   }, [currentPost, defaultValues, reset]);
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log({ user, data });
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      if (!user) {
+        throw new Error('You must be logged in to modify a post.');
+      }
+      const postData = {
+        ...data,
+        author: "",
+        updatedBy: user.id, // Assuming the user object has an id field
+        updatedAt: new Date(), // Timestamp for when the post is updated or created
+      };
+      console.log({ postData });
+  
+      // Check if we're updating an existing post or creating a new one
+      if (currentPost) {
+        // Update existing post
+        const postRef = doc(DB, 'posts', currentPost.id);
+        await updateDoc(postRef, postData);
+        enqueueSnackbar('Update success!');
+      } else {
+        // Create new post
+        const docRef = await addDoc(collection(DB, 'posts'), {
+          ...postData,
+          createdBy: user.id,
+          createdAt: new Date(),
+        });
+        console.info('Post created with ID: ', docRef.id);
+        enqueueSnackbar('Create success!');
+      }
+  
       reset();
-      preview.onFalse();
-      enqueueSnackbar(currentPost ? 'Update success!' : 'Create success!');
       router.push(paths.dashboard.post.root);
       console.info('DATA', data);
     } catch (error) {
       console.error(error);
+      enqueueSnackbar('Error updating post!', { variant: 'error' });
     }
   });
+  
+
 
   const handleDrop = useCallback(
     (acceptedFiles) => {

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-
+import { useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
@@ -14,7 +14,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import { fDate } from 'src/utils/format-time';
+import { fDateISO } from 'src/utils/format-time';
 import { fShortenNumber } from 'src/utils/format-number';
 
 import Label from 'src/components/label';
@@ -22,19 +22,21 @@ import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import TextMaxLine from 'src/components/text-max-line';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useDeletePost } from 'src/api/posts';
 
 // ----------------------------------------------------------------------
 
 export default function PostItemHorizontal({ post }) {
   const popover = usePopover();
-
+  const deletePost = useDeletePost(); // Use the delete hook
   const router = useRouter();
 
   const smUp = useResponsive('up', 'sm');
 
   const {
+    id,
     title,
-    author,
+    author = {},
     publish,
     coverUrl,
     createdAt,
@@ -43,6 +45,13 @@ export default function PostItemHorizontal({ post }) {
     totalComments,
     description,
   } = post;
+
+  const handleDeletePost = useCallback(
+    async () => {
+      await deletePost(id);
+    },
+    [deletePost, id]
+  );
 
   return (
     <>
@@ -58,7 +67,7 @@ export default function PostItemHorizontal({ post }) {
             </Label>
 
             <Box component="span" sx={{ typography: 'caption', color: 'text.disabled' }}>
-              {fDate(createdAt)}
+              {fDateISO(createdAt)}
             </Box>
           </Stack>
 
@@ -156,6 +165,7 @@ export default function PostItemHorizontal({ post }) {
 
         <MenuItem
           onClick={() => {
+            handleDeletePost();
             popover.onClose();
           }}
           sx={{ color: 'error.main' }}
@@ -170,6 +180,7 @@ export default function PostItemHorizontal({ post }) {
 
 PostItemHorizontal.propTypes = {
   post: PropTypes.shape({
+    id: PropTypes.string,
     author: PropTypes.object,
     coverUrl: PropTypes.string,
     createdAt: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),

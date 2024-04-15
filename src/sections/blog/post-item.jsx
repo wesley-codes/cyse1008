@@ -14,7 +14,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import { fDate } from 'src/utils/format-time';
+import { fDateISO } from 'src/utils/format-time';
 import { fShortenNumber } from 'src/utils/format-number';
 
 import { AvatarShape } from 'src/assets/illustrations';
@@ -30,7 +30,7 @@ export default function PostItem({ post, index }) {
 
   const mdUp = useResponsive('up', 'md');
 
-  const { coverUrl, title, totalViews, totalComments, totalShares, author, createdAt } = post;
+  const { coverUrl, id, title, totalViews, totalComments, totalShares, author, createdAt } = post;
 
   const latestPost = index === 0 || index === 1 || index === 2;
 
@@ -50,7 +50,7 @@ export default function PostItem({ post, index }) {
 
         <PostContent
           title={title}
-          createdAt={createdAt}
+          // createdAt={createdAt}
           totalViews={totalViews}
           totalShares={totalShares}
           totalComments={totalComments}
@@ -68,7 +68,7 @@ export default function PostItem({ post, index }) {
         />
       </Card>
     );
-  }
+  }   
 
   return (
     <Card>
@@ -99,11 +99,12 @@ export default function PostItem({ post, index }) {
       </Box>
 
       <PostContent
+        id={id}
         title={title}
         totalViews={totalViews}
         totalComments={totalComments}
         totalShares={totalShares}
-        createdAt={createdAt}
+        // createdAt={createdAt}
       />
     </Card>
   );
@@ -116,10 +117,10 @@ PostItem.propTypes = {
 
 // ----------------------------------------------------------------------
 
-export function PostContent({ title, createdAt, totalViews, totalShares, totalComments, index }) {
+export function PostContent({ title, createdAt, totalViews, totalShares, totalComments, id, index }) {
   const mdUp = useResponsive('up', 'md');
 
-  const linkTo = paths.post.details(title);
+  const linkTo = paths.post.id;
 
   const latestPostLarge = index === 0;
 
@@ -151,7 +152,7 @@ export function PostContent({ title, createdAt, totalViews, totalShares, totalCo
           }),
         }}
       >
-        {fDate(createdAt)}
+        {fDateISO(createdAt)}
       </Typography>
 
       <Link color="inherit" component={RouterLink} href={linkTo}>
@@ -196,6 +197,7 @@ export function PostContent({ title, createdAt, totalViews, totalShares, totalCo
 PostContent.propTypes = {
   createdAt: PropTypes.string,
   index: PropTypes.number,
+  id: PropTypes.string,
   title: PropTypes.string,
   totalComments: PropTypes.number,
   totalShares: PropTypes.number,

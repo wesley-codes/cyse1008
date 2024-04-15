@@ -6,111 +6,111 @@ import { DB } from 'src/auth/context/firebase/lib';
 import { useSnackbar } from 'src/components/snackbar';
 
 
-export function useGetProducts() {
-  const [data, setData] = useState({ products: [] });
+export function useGetPosts() {
+  const [data, setData] = useState({ posts: [] });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchPosts = async () => {
       setIsLoading(true);
       try {
-        const q = query(collection(DB, "products")); // Assuming you have a collection named 'products'
+        const q = query(collection(DB, "posts")); // Assuming you have a collection named 'posts'
         const querySnapshot = await getDocs(q);
-        const products = querySnapshot.docs.map(docSnapshot => ({ id: docSnapshot.id, ...docSnapshot.data() }));
-        setData({ products });
+        const posts = querySnapshot.docs.map(docSnapshot => ({ id: docSnapshot.id, ...docSnapshot.data() }));
+        setData({ posts });
         setIsLoading(false);
       } catch (err) {
-        console.error("Error fetching products from Firestore:", err);
+        console.error("Error fetching posts from Firestore:", err);
         setError(err);
         setIsLoading(false);
       }
     };
 
-    fetchProducts();
+    fetchPosts();
   }, []); // This effect runs once on component mount
 
   // Memoize value to avoid unnecessary re-renders
   const memoizedValue = useMemo(() => ({
-    products: data.products,
-    productsLoading: isLoading,
-    productsError: error,
-    productsValidating: isLoading, // For consistency with the original function's return value
-    productsEmpty: !isLoading && !data.products.length,
-  }), [data.products, error, isLoading]);
+    posts: data.posts,
+    postsLoading: isLoading,
+    postsError: error,
+    postsValidating: isLoading, // For consistency with the original function's return value
+    postsEmpty: !isLoading && !data.posts.length,
+  }), [data.posts, error, isLoading]);
 
   return memoizedValue;
 }
 
-export const useDeleteProduct = () => {
+export const useDeletePost = () => {
   const { enqueueSnackbar } = useSnackbar();
 
-  const deleteProduct = useCallback(async (productId) => {
+  const deletePost = useCallback(async (postId) => {
     try {
-      await deleteDoc(doc(DB, 'products', productId));
-      enqueueSnackbar('Product successfully deleted', { variant: 'success' });
+      await deleteDoc(doc(DB, 'posts', postId));
+      enqueueSnackbar('Post successfully deleted', { variant: 'success' });
     } catch (error) {
-      console.error('Error deleting product: ', error);
-      enqueueSnackbar('Failed to delete product', { variant: 'error' });
+      console.error('Error deleting post: ', error);
+      enqueueSnackbar('Failed to delete post', { variant: 'error' });
     }
   }, [enqueueSnackbar]);
 
-  return deleteProduct;
+  return deletePost;
 };
 
-export function useGetProduct(productId) {
-  const [product, setProduct] = useState(null);
+export function useGetPost(postId) {
+  const [post, setPost] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!productId) {
-      // If no productId is provided, immediately return without fetching
-      setProduct(null);
+    if (!postId) {
+      // If no postId is provided, immediately return without fetching
+      setPost(null);
       setIsLoading(false);
       setError(null);
       return;
     }
 
-    const fetchProduct = async () => {
+    const fetchPost = async () => {
       setIsLoading(true);
       try {
-        const productRef = doc(DB, "products", productId); // Assuming 'products' is your collection
-        const docSnap = await getDoc(productRef);
+        const postRef = doc(DB, "posts", postId); // Assuming 'posts' is your collection
+        const docSnap = await getDoc(postRef);
 
         if (docSnap.exists()) {
-          setProduct({ id: docSnap.id, ...docSnap.data() });
+          setPost({ id: docSnap.id, ...docSnap.data() });
         } else {
           // Handle the case where the document does not exist
           console.log("No such document!");
           setError("No such document!");
         }
       } catch (err) {
-        console.error("Error fetching product:", err);
+        console.error("Error fetching post:", err);
         setError(err);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchProduct();
-  }, [productId]); // Depend on productId to re-fetch when it changes
+    fetchPost();
+  }, [postId]); // Depend on postId to re-fetch when it changes
 
   // Memoize the returned object to avoid unnecessary re-renders
   const memoizedValue = useMemo(() => ({
-    product,
-    productLoading: isLoading,
-    productError: error,
-    productValidating: isLoading, // Using isLoading for consistency with the original function's interface
-  }), [product, error, isLoading]);
+    post,
+    postLoading: isLoading,
+    postError: error,
+    postValidating: isLoading, // Using isLoading for consistency with the original function's interface
+  }), [post, error, isLoading]);
 
   return memoizedValue;
 }
 
 // ----------------------------------------------------------------------
 
-export function useSearchProducts(_query) {
-  const URL = _query ? [endpoints.product.search, { params: { _query } }] : '';
+export function useSearchPosts(_query) {
+  const URL = _query ? [endpoints.post.search, { params: { _query } }] : '';
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, {
     keepPreviousData: true,
