@@ -57,7 +57,7 @@ export const mainRoutes = [
         children: [
           { element: <PostListPage />, index: true },
           { path: 'list', element: <PostListPage /> },
-          { path: ':title', element: <PostDetailsPage /> },
+          { path: ':id', element: <PostDetailsPage /> },
         ],
       },
     ],

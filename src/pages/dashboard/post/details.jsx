@@ -8,8 +8,9 @@ import { PostDetailsView } from 'src/sections/blog/view';
 
 export default function PostDetailsPage() {
   const params = useParams();
-
-  const { title } = params;
+  console.log({ params })
+  const { id } = params;
+  console.log({ id })
 
   return (
     <>
@@ -17,7 +18,7 @@ export default function PostDetailsPage() {
         <title> Dashboard: Post Details</title>
       </Helmet>
 
-      <PostDetailsView title={`${title}`} />
+      <PostDetailsView id={`${id}`} />
     </>
   );
 }

@@ -8,7 +8,7 @@ import { PostEditView } from 'src/sections/blog/view';
 
 export default function PostEditPage() {
   const params = useParams();
-
+console.log({ postedit: params })
   const { id } = params;
 
   return (

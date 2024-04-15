@@ -72,7 +72,7 @@ export default function PostItemHorizontal({ post }) {
           </Stack>
 
           <Stack spacing={1} flexGrow={1}>
-            <Link color="inherit" component={RouterLink} href={paths.dashboard.post.details(id)}>
+            <Link color="inherit" component={RouterLink} href={`/dashboard/post/${id}/edit`}>
               <TextMaxLine variant="subtitle2" line={2}>
                 {title}
               </TextMaxLine>

@@ -32,10 +32,11 @@ import PostDetailsToolbar from '../post-details-toolbar';
 
 // ----------------------------------------------------------------------
 
-export default function PostDetailsView({ title }) {
+export default function PostDetailsView({ id }) {
+  console.log({ id })
   const [publish, setPublish] = useState('');
 
-  const { post, postLoading, postError } = useGetPost(title);
+  const { post, postLoading, postError } = useGetPost(id);
 
   const handleChangePublish = useCallback((newValue) => {
     setPublish(newValue);
@@ -168,5 +169,5 @@ export default function PostDetailsView({ title }) {
 }
 
 PostDetailsView.propTypes = {
-  title: PropTypes.string,
+  id: PropTypes.string,
 };
