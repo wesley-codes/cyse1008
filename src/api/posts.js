@@ -44,8 +44,10 @@ export function useGetPosts() {
 
 export const useDeletePost = () => {
   const { enqueueSnackbar } = useSnackbar();
+  
 
   const deletePost = useCallback(async (postId) => {
+    console.log({ postId })
     try {
       await deleteDoc(doc(DB, 'posts', postId));
       enqueueSnackbar('Post successfully deleted', { variant: 'success' });

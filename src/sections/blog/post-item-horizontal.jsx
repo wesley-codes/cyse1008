@@ -48,10 +48,18 @@ export default function PostItemHorizontal({ post }) {
 
   const handleDeletePost = useCallback(
     async () => {
-      await deletePost(id);
+      try {
+        await deletePost(id);
+        // Use router.replace to stay on the same page and re-trigger data fetching
+        router.replace(router.asPath);
+      } catch (error) {
+        console.error('Failed to delete post:', error);
+        // Handle errors (e.g., show an error message)
+      }
     },
-    [deletePost, id]
+    [deletePost, id, router]
   );
+  
 
   return (
     <>
