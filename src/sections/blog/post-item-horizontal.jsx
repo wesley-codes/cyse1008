@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-
+import { useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
@@ -14,7 +14,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import { fDate } from 'src/utils/format-time';
+import { fDateISO } from 'src/utils/format-time';
 import { fShortenNumber } from 'src/utils/format-number';
 
 import Label from 'src/components/label';
@@ -22,19 +22,21 @@ import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import TextMaxLine from 'src/components/text-max-line';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useDeletePost } from 'src/api/posts';
 
 // ----------------------------------------------------------------------
 
-export default function PostItemHorizontal({ post }) {
+export default function PostItemHorizontal({ post, onDelete }) {
   const popover = usePopover();
-
+  const deletePost = useDeletePost(); // Use the delete hook
   const router = useRouter();
 
   const smUp = useResponsive('up', 'sm');
 
   const {
+    id,
     title,
-    author,
+    author = {},
     publish,
     coverUrl,
     createdAt,
@@ -43,6 +45,20 @@ export default function PostItemHorizontal({ post }) {
     totalComments,
     description,
   } = post;
+
+  const handleDeletePost = useCallback(async () => {
+    try {
+      await deletePost(id);
+      // After successful deletion, call the onDelete prop if it exists
+      if (onDelete) {
+        onDelete(id);
+      }
+    } catch (error) {
+      console.error('Failed to delete post:', error);
+      // Handle errors (e.g., show an error message)
+    }
+  }, [deletePost, id, onDelete]);
+  
 
   return (
     <>
@@ -58,12 +74,12 @@ export default function PostItemHorizontal({ post }) {
             </Label>
 
             <Box component="span" sx={{ typography: 'caption', color: 'text.disabled' }}>
-              {fDate(createdAt)}
+              {fDateISO(createdAt)}
             </Box>
           </Stack>
 
           <Stack spacing={1} flexGrow={1}>
-            <Link color="inherit" component={RouterLink} href={paths.dashboard.post.details(title)}>
+            <Link color="inherit" component={RouterLink} href={`/dashboard/post/${id}/edit`}>
               <TextMaxLine variant="subtitle2" line={2}>
                 {title}
               </TextMaxLine>
@@ -137,7 +153,7 @@ export default function PostItemHorizontal({ post }) {
         <MenuItem
           onClick={() => {
             popover.onClose();
-            router.push(paths.dashboard.post.details(title));
+            router.push(paths.dashboard.post.details(id));
           }}
         >
           <Iconify icon="solar:eye-bold" />
@@ -156,6 +172,7 @@ export default function PostItemHorizontal({ post }) {
 
         <MenuItem
           onClick={() => {
+            handleDeletePost();
             popover.onClose();
           }}
           sx={{ color: 'error.main' }}
@@ -170,14 +187,16 @@ export default function PostItemHorizontal({ post }) {
 
 PostItemHorizontal.propTypes = {
   post: PropTypes.shape({
+    id: PropTypes.string,
     author: PropTypes.object,
     coverUrl: PropTypes.string,
     createdAt: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
-    description: PropTypes.string,
+    description: PropTypes.string,    
     publish: PropTypes.string,
     title: PropTypes.string,
     totalComments: PropTypes.number,
     totalShares: PropTypes.number,
     totalViews: PropTypes.number,
   }),
+  onDelete: PropTypes.func,
 };

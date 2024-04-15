@@ -34,6 +34,7 @@
     "@mui/x-data-grid": "^6.19.6",
     "@mui/x-date-pickers": "^6.18.4",
     "@react-pdf/renderer": "^3.3.8",
+    "@reduxjs/toolkit": "^2.2.2",
     "autosuggest-highlight": "^3.3.4",
     "axios": "^1.6.7",
     "clsx": "^2.1.0",

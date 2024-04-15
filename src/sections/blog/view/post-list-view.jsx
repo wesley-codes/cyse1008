@@ -11,9 +11,9 @@ import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
 import { useDebounce } from 'src/hooks/use-debounce';
-
+import { useGetPosts, useSearchPosts } from 'src/api/posts';
 import { POST_SORT_OPTIONS } from 'src/_mock';
-import { useGetPosts, useSearchPosts } from 'src/api/blog';
+// import { useGetPosts, useSearchPosts } from 'src/api/blog';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -168,11 +168,11 @@ const applyFilter = ({ inputData, filters, sortBy }) => {
   const { publish } = filters;
 
   if (sortBy === 'latest') {
-    inputData = orderBy(inputData, ['createdAt'], ['desc']);
+    inputData = orderBy(inputData, ['totalViews'], ['desc']);
   }
 
   if (sortBy === 'oldest') {
-    inputData = orderBy(inputData, ['createdAt'], ['asc']);
+    inputData = orderBy(inputData, ['totalViews'], ['asc']);
   }
 
   if (sortBy === 'popular') {
