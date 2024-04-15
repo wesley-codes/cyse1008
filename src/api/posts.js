@@ -5,6 +5,7 @@ import { fetcher, endpoints } from 'src/utils/axios';
 import { DB } from 'src/auth/context/firebase/lib';
 import { useSnackbar } from 'src/components/snackbar';
 
+
 export function useGetPosts() {
   const [data, setData] = useState({ posts: [] });
   const [isLoading, setIsLoading] = useState(true);
@@ -43,8 +44,10 @@ export function useGetPosts() {
 
 export const useDeletePost = () => {
   const { enqueueSnackbar } = useSnackbar();
+  
 
   const deletePost = useCallback(async (postId) => {
+    console.log({ postId })
     try {
       await deleteDoc(doc(DB, 'posts', postId));
       enqueueSnackbar('Post successfully deleted', { variant: 'success' });
@@ -57,26 +60,6 @@ export const useDeletePost = () => {
   return deletePost;
 };
 
-
-// ----------------------------------------------------------------------
-
-// export function useGetPost(postId) {
-//   const URL = postId ? [endpoints.post.details, { params: { postId } }] : '';
-
-//   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-
-//   const memoizedValue = useMemo(
-//     () => ({
-//       post: data?.post,
-//       postLoading: isLoading,
-//       postError: error,
-//       postValidating: isValidating,
-//     }),
-//     [data?.post, error, isLoading, isValidating]
-//   );
-
-//   return memoizedValue;
-// }
 export function useGetPost(postId) {
   const [post, setPost] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -89,7 +72,7 @@ export function useGetPost(postId) {
       setIsLoading(false);
       setError(null);
       return;
-    } 
+    }
 
     const fetchPost = async () => {
       setIsLoading(true);

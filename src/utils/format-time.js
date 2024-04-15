@@ -10,7 +10,8 @@ const timestampToDate = (timestamp) => {
 };
 
 export function fDateISO(date, newFormat = 'dd MMM yyyy') {
-  const dateObj = timestampToDate(date);
+  console.log({ date })
+  const dateObj = date ? timestampToDate(date) : new Date(); 
   return format(dateObj, newFormat);
 }
 

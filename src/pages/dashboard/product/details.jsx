@@ -8,7 +8,7 @@ import { ProductDetailsView } from 'src/sections/product/view';
 
 export default function ProductDetailsPage() {
   const params = useParams();
-
+console.log({ params })
   const { id } = params;
 
   return (

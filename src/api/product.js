@@ -4,26 +4,7 @@ import { doc, query, getDoc, getDocs, deleteDoc, collection } from "firebase/fir
 import { fetcher, endpoints } from 'src/utils/axios';
 import { DB } from 'src/auth/context/firebase/lib';
 import { useSnackbar } from 'src/components/snackbar';
-// ----------------------------------------------------------------------
 
-// export function useGetProducts() {
-//   const URL = endpoints.product.list;
-
-//   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-
-//   const memoizedValue = useMemo(
-//     () => ({
-//       products: data?.products || [],
-//       productsLoading: isLoading,
-//       productsError: error,
-//       productsValidating: isValidating,
-//       productsEmpty: !isLoading && !data?.products.length,
-//     }),
-//     [data?.products, error, isLoading, isValidating]
-//   );
-
-//   return memoizedValue;
-// }
 
 export function useGetProducts() {
   const [data, setData] = useState({ products: [] });
@@ -77,26 +58,6 @@ export const useDeleteProduct = () => {
   return deleteProduct;
 };
 
-
-// ----------------------------------------------------------------------
-
-// export function useGetProduct(productId) {
-//   const URL = productId ? [endpoints.product.details, { params: { productId } }] : '';
-
-//   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-
-//   const memoizedValue = useMemo(
-//     () => ({
-//       product: data?.product,
-//       productLoading: isLoading,
-//       productError: error,
-//       productValidating: isValidating,
-//     }),
-//     [data?.product, error, isLoading, isValidating]
-//   );
-
-//   return memoizedValue;
-// }
 export function useGetProduct(productId) {
   const [product, setProduct] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
