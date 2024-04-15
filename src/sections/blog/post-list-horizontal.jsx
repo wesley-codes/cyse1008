@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -8,7 +9,16 @@ import PostItemHorizontal from './post-item-horizontal';
 
 // ----------------------------------------------------------------------
 
-export default function PostListHorizontal({ posts, loading }) {
+export default function PostListHorizontal({ posts: _posts, loading }) {
+  const [posts, setPosts] = useState(_posts);
+    // Handle deleting a post and updating the state
+  useEffect(() => {
+    setPosts(_posts);
+  }, [_posts]); 
+  const handleDelete = (postId) => {
+    setPosts(currentPosts => currentPosts.filter(post => post.id !== postId));
+    // Optionally, trigger a refetch or further update logic here if needed
+  };
   const renderSkeleton = (
     <>
       {[...Array(16)].map((_, index) => (
@@ -20,7 +30,7 @@ export default function PostListHorizontal({ posts, loading }) {
   const renderList = (
     <>
       {posts.map((post) => (
-        <PostItemHorizontal key={post.id} post={post} />
+        <PostItemHorizontal key={post.id} post={post} onDelete={() => handleDelete(post.id)}/>
       ))}
     </>
   );

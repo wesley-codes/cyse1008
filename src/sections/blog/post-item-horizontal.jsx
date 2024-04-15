@@ -26,7 +26,7 @@ import { useDeletePost } from 'src/api/posts';
 
 // ----------------------------------------------------------------------
 
-export default function PostItemHorizontal({ post }) {
+export default function PostItemHorizontal({ post, onDelete }) {
   const popover = usePopover();
   const deletePost = useDeletePost(); // Use the delete hook
   const router = useRouter();
@@ -46,19 +46,18 @@ export default function PostItemHorizontal({ post }) {
     description,
   } = post;
 
-  const handleDeletePost = useCallback(
-    async () => {
-      try {
-        await deletePost(id);
-        // Use router.replace to stay on the same page and re-trigger data fetching
-        router.replace(router.asPath);
-      } catch (error) {
-        console.error('Failed to delete post:', error);
-        // Handle errors (e.g., show an error message)
+  const handleDeletePost = useCallback(async () => {
+    try {
+      await deletePost(id);
+      // After successful deletion, call the onDelete prop if it exists
+      if (onDelete) {
+        onDelete(id);
       }
-    },
-    [deletePost, id, router]
-  );
+    } catch (error) {
+      console.error('Failed to delete post:', error);
+      // Handle errors (e.g., show an error message)
+    }
+  }, [deletePost, id, onDelete]);
   
 
   return (
@@ -192,11 +191,12 @@ PostItemHorizontal.propTypes = {
     author: PropTypes.object,
     coverUrl: PropTypes.string,
     createdAt: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
-    description: PropTypes.string,
+    description: PropTypes.string,    
     publish: PropTypes.string,
     title: PropTypes.string,
     totalComments: PropTypes.number,
     totalShares: PropTypes.number,
     totalViews: PropTypes.number,
   }),
+  onDelete: PropTypes.func,
 };
