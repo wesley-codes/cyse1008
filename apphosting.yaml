@@ -24,7 +24,7 @@ runConfig:
   env:
   # Get these values from the Firebase console
   - variable: NEXT_PUBLIC_FIREBASE_API_KEY
-    value: ""
+    value: TODO
   - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
     value: "quilt-b3dec.firebaseapp.com"
   - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
