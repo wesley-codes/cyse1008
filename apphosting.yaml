@@ -23,6 +23,8 @@ runConfig:
   #   secret: mySecretRef
   env:
   # Get these values from the Firebase console
+  - variable: NEXT_PUBLIC_STATIC_EXPORT
+    value: "true"
   - variable: NEXT_PUBLIC_FIREBASE_API_KEY
     value: TODO
   - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
