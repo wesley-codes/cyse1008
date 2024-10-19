@@ -7,8 +7,8 @@ runConfig:
   # cpu: 1
   # memoryMiB: 512
 
-# Environment variables and secrets.
-# env:
+  # Environment variables and secrets.
+  # env:
   # Configure environment variables.
   # See https://firebase.google.com/docs/app-hosting/configure#user-defined-environment
   # - variable: MESSAGE
@@ -21,19 +21,21 @@ runConfig:
   # See https://firebase.google.com/docs/app-hosting/configure#secret-parameters
   # - variable: MY_SECRET
   #   secret: mySecretRef
+  # add secret in the terminal eg:  firebase apphosting:secrets:set <my-api-key>
+  # access the key: firebase apphosting:secrets:access my-api-key
   env:
-  # Get these values from the Firebase console
-  - variable: NEXT_PUBLIC_STATIC_EXPORT
-    value: "true"
-  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
-    value: TODO
-  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
-    value: "quilt-b3dec.firebaseapp.com"
-  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
-    value: "quilt-b3dec"
-  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
-    value: "quilt-b3dec.appspot.com"
-  - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
-    value: "601113315760"
-  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
-    value: "1:601113315760:web:185ff6e54c152b9be3ee75"
+    # Get these values from the Firebase console
+    - variable: NEXT_PUBLIC_STATIC_EXPORT
+      value: "true"
+    - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+      secret: my-api-key
+    - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+      value: "quilt-b3dec.firebaseapp.com"
+    - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+      value: "quilt-b3dec"
+    - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+      value: "quilt-b3dec.appspot.com"
+    - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+      value: "601113315760"
+    - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+      value: "1:601113315760:web:185ff6e54c152b9be3ee75"
