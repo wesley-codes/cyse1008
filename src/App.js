@@ -15,8 +15,9 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          
         </a>
+        <h1>My name is Meka </h1>
       </header>
     </div>
   );
