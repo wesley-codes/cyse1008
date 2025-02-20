@@ -48,6 +48,8 @@ module.exports = {
     'no-restricted-exports': 'off',
     'no-promise-executor-return': 'off',
     'import/prefer-default-export': 'off',
+    'arrow-body-style': 'off',
+
 
     // React Rules
     'react/react-in-jsx-scope': 'off', // Not required in Next.js
@@ -55,6 +57,7 @@ module.exports = {
     'react/no-children-prop': 'off',
     'react/no-array-index-key': 'off',
     'react/require-default-props': 'off',
+    'react/no-unescaped-entities': 'off',
     'react/jsx-props-no-spreading': 'off', // Allow prop spreading
     'react/function-component-definition': [
       'off', // Turn off the rule

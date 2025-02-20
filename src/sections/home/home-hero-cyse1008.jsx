@@ -1,8 +1,11 @@
-import Box from '@mui/material/Box';
-import { useTheme } from '@mui/material/styles';
-import Button from '@mui/material/Button';
 import { useState } from 'react';
+
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import { useTheme } from '@mui/material/styles';
+
 import CustomComponent from './custom-component';
+
 export function HomeHeroCYSE1008() {
   const theme = useTheme();
   const [count, setCount] = useState(0);

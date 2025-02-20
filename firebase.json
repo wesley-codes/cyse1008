@@ -3,20 +3,13 @@
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
- "hosting": {
-   "hosting": {
-    "source": ".next",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "frameworksBackend": {
-      "region": "us-central1"
-    },
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
     ]
-  }
   },
   "functions": [
     {
@@ -34,8 +27,5 @@
         "npm run lint || exit 0"
       ]
     }
-  ],
-  "storage": {
-    "rules": "storage.rules"
-  }
+  ]
 }
